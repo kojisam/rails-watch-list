@@ -5,30 +5,36 @@ class ListsController < ApplicationController
     @lists = List.all
   end
 
-  def new
-    @list = List.new
+  def show
+    @bookmark = Bookmark.new
+    @review = Review.new(list: @list)
   end
 
-  def show
-    @list = List.find(params[:id])
+  def new
+    @list = List.new
   end
 
   def create
     @list = List.new(list_params)
     if @list.save
-      redirect_to @list, notice: 'List Saved'
+      redirect_to list_path(@list)
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @list.destroy
+    redirect_to lists_path, status: :see_other
   end
 
   private
 
   def set_list
-    @lists = List.find(params[:id])
+    @list = List.find(params[:id])
   end
 
   def list_params
-    params.require(:list).permit(:name)
+    params.require(:list).permit(:name, :photo)
   end
 end
