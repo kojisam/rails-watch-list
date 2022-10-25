@@ -1,4 +1,6 @@
 class ListsController < ApplicationController
+  before_action :set_list, only: [:show, :destroy]
+
   def index
     @lists = List.all
   end
@@ -22,9 +24,9 @@ class ListsController < ApplicationController
 
   private
 
-  # def set_lists
-  #   @lists = List.find(params[:id])
-  # end
+  def set_list
+    @lists = List.find(params[:id])
+  end
 
   def list_params
     params.require(:list).permit(:name)
